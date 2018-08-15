@@ -1,0 +1,46 @@
+
+change_ini = pt_GUIDE_pop;
+
+if change_ini == 1
+    handles = pt_GUIDE_value;
+    % input value
+    filename     = handles.edit_filename; 
+    trimming     = handles.checkbox_trimming; 
+    lnoise       = handles.edit_lnoise; 
+    lobject      = handles.edit_lobject;
+    threshold    = handles.edit_threshold; 
+    thfactor     = handles.edit_thfactor;
+    maxdisp      = handles.edit_maxdisp; 
+    p_mem        = handles.edit_p_mem; 
+    p_dim        = handles.edit_p_dim; 
+    p_good       = handles.edit_p_good; 
+    p_quiet      = handles.edit_p_quiet;
+    MSD_lenlower = handles.edit_frame_lenlower;
+    MSD_lenupper = handles.edit_frame_lenupper;
+    MSD_ts       = handles.edit_ts;
+    MSD_te       = handles.edit_te;
+    
+    %display
+    disp(['filename : ' filename])
+    if num2str(trimming) == '1'
+        disp(['trimming : ','ON'])
+    elseif num2str(trimming) == '0'
+        disp(['trimming : ','OFF'])
+    end
+    disp(['lnoise   : ' num2str(lnoise),'     maxdisp  : ' num2str(maxdisp)])   
+    disp(['lobject  : ' num2str(lobject),'     p_mem    : ' num2str(p_mem)]) 
+    disp(['threshold: ' num2str(threshold),'    p_dim    : ' num2str(p_dim)])
+    disp(['thfactor : ' num2str(thfactor)]) 
+%     disp(['maxdisp  : ' num2str(maxdisp)])   
+%     disp(['p_mem    : ' num2str(p_mem)])     
+%     disp(['p_dim    : ' num2str(p_dim)])    
+%     disp(['p_good   : ' num2str(p_good)])    
+%     disp(['p_quiet  : ' num2str(p_quiet)])  
+    disp(['MSD Frame_length: ' num2str(MSD_lenlower),...
+          ' ~ ',num2str(MSD_lenupper)])         
+    disp(['MSD Time_length : ' num2str(MSD_ts),...
+          '  ~ ',num2str(MSD_te)])   
+end
+
+  
+    

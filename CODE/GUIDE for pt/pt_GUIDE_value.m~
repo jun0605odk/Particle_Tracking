@@ -1,0 +1,525 @@
+function varargout = pt_GUIDE_value(varargin)
+% PT_GUIDE_VALUE MATLAB code for pt_GUIDE_value.fig
+%      PT_GUIDE_VALUE, by itself, creates a new PT_GUIDE_VALUE or raises the existing
+%      singleton*.
+%
+%      H = PT_GUIDE_VALUE returns the handle to a new PT_GUIDE_VALUE or the handle to
+%      the existing singleton*.
+%
+%      PT_GUIDE_VALUE('CALLBACK',hObject,eventData,handles,...) calls the local
+%      function named CALLBACK in PT_GUIDE_VALUE.M with the given input arguments.
+%
+%      PT_GUIDE_VALUE('Property','Value',...) creates a new PT_GUIDE_VALUE or raises the
+%      existing singleton*.  Starting from the left, property value pairs are
+%      applied to the GUI before pt_GUIDE_value_OpeningFcn gets called.  An
+%      unrecognized property name or invalid value makes property application
+%      stop.  All inputs are passed to pt_GUIDE_value_OpeningFcn via varargin.
+%
+%      *See GUI Options on GUIDE's Tools menu.  Choose "GUI allows only one
+%      instance to run (singleton)".
+%
+% See also: GUIDE, GUIDATA, GUIHANDLES
+
+% Edit the above text to modify the response to help pt_GUIDE_value
+
+% Last Modified by GUIDE v2.5 08-Jul-2018 22:22:02
+
+% Begin initialization code - DO NOT EDIT
+gui_Singleton = 1;
+gui_State = struct('gui_Name',       mfilename, ...
+                   'gui_Singleton',  gui_Singleton, ...
+                   'gui_OpeningFcn', @pt_GUIDE_value_OpeningFcn, ...
+                   'gui_OutputFcn',  @pt_GUIDE_value_OutputFcn, ...
+                   'gui_LayoutFcn',  [] , ...
+                   'gui_Callback',   []);
+if nargin && ischar(varargin{1})
+    gui_State.gui_Callback = str2func(varargin{1});
+end
+
+if nargout
+    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+else
+    gui_mainfcn(gui_State, varargin{:});
+end
+% End initialization code - DO NOT EDIT
+
+
+% --- Executes just before pt_GUIDE_value is made visible.
+function pt_GUIDE_value_OpeningFcn(hObject, eventdata, handles, varargin)
+% This function has no output args, see OutputFcn.
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+% varargin   command line arguments to pt_GUIDE_value (see VARARGIN)
+
+
+if (size(varargin{2},2)==2) & (size(varargin{1},2)==18)
+    % initial value (object)
+    set(handles.edit_filename,'String',varargin{2}{1});
+    set(handles.checkbox_trimming,'Value',varargin{1}(1));
+    set(handles.edit_lnoise,'String',varargin{1}(2));
+    set(handles.edit_lobject,'String',varargin{1}(3));
+    set(handles.edit_threshold,'String',varargin{1}(4));
+    set(handles.edit_thfactor,'String',varargin{1}(5));
+    set(handles.edit_maxdisp,'String',varargin{1}(6));
+    set(handles.edit_p_mem,'String',varargin{1}(7));
+    set(handles.edit_p_dim,'String',varargin{1}(8));
+    set(handles.edit_p_good,'String',varargin{1}(9));
+    set(handles.edit_p_quiet,'String',varargin{1}(10));
+    set(handles.edit_frame_lenlower,'String',varargin{1}(11));
+    set(handles.edit_frame_lenupper,'String',varargin{1}(12));
+    set(handles.edit_ts,'String',varargin{1}(13));
+    set(handles.edit_te,'String',varargin{1}(14));
+    set(handles.edit_unit_time,'String',varargin{1}(15));
+    set(handles.edit_unit_length,'String',varargin{1}(16));
+
+    % initial value (return value)
+    handles.filename = varargin{2}{1};
+    handles.pathname = varargin{2}{2};
+    handles.trimming = varargin{1}(1);
+    handles.lnoise = varargin{1}(2);
+    handles.lobject = varargin{1}(3);
+    handles.threshold = varargin{1}(4);
+    handles.thfactor = varargin{1}(5);
+    handles.maxdisp = varargin{1}(6);
+    handles.p_mem = varargin{1}(7);
+    handles.p_dim = varargin{1}(8);
+    handles.p_good = varargin{1}(9);
+    handles.p_quiet = varargin{1}(10);
+    handles.frame_lenlower = varargin{1}(11);
+    handles.frame_lenupper = varargin{1}(12);
+    handles.ts = varargin{1}(13);
+    handles.te = varargin{1}(14);
+    handles.display = varargin{1}(15);
+    handles.unit_time = varargin{1}(16);
+    handles.unit_length = varargin{1}(17);
+    handles.display_detail = varargin{1}(18);
+    handles.save = 0;
+    handles.output = hObject;
+    
+
+    guidata(hObject, handles);
+else
+    warning('value converted initial value')
+    warning('please select "save value" before click "ok"!')
+    % value (box)
+    set(handles.edit_filename,'String','Wt Abp1-mCH(250ms).tif')
+    set(handles.checkbox_trimming,'Value',0)
+    set(handles.edit_lnoise,'String',0)
+    set(handles.edit_lobject,'String',9);
+    set(handles.edit_threshold,'String',30);
+    set(handles.edit_thfactor,'String',0.0);
+    set(handles.edit_maxdisp,'String',5);
+    set(handles.edit_p_mem,'String',0);
+    set(handles.edit_p_dim,'String',2);
+    set(handles.edit_p_good,'String',0);
+    set(handles.edit_p_quiet,'String',1);
+    set(handles.edit_frame_lenlower,'String',10);
+    set(handles.edit_frame_lenupper,'String',60);
+    set(handles.edit_ts,'String',0);
+    set(handles.edit_te,'String',35);
+    set(handles.popupmenu_display,'Value',1);
+    set(handles.edit_unit_time,'String',1);
+    set(handles.edit_unit_length,'String',64.5);
+    set(handles.checkbox_save,'Value',1);
+    
+    % % value (return value)
+    handles.filename = 'Wt Abp1-mCH(250ms).tif';
+    handles.pathname = '/';
+    handles.trimming = str2double('0');
+    handles.lnoise = str2double('0');
+    handles.lobject = str2double('9');
+    handles.threshold = str2double('30');
+    handles.thfactor = str2double('0.0');
+    handles.maxdisp = str2double('5');
+    handles.p_mem = str2double('0');
+    handles.p_dim = str2double('2');
+    handles.p_good = str2double('0');
+    handles.p_quiet = str2double('1');
+    handles.frame_lenlower = str2double('10');
+    handles.frame_lenupper = str2double('60');
+    handles.ts = str2double('0');
+    handles.te = str2double('35');
+    handles.display = str2double('1');
+    handles.unit_time = str2double('1');
+    handles.unit_length = str2double('64.5');
+    handles.save = 1;
+    handles.display_detail = str2double('101111111');
+    
+    guidata(hObject,handles);
+end
+
+handles.cur_path = cd;
+guidata(hObject,handles);
+% UIWAIT makes pt_GUIDE_value wait for user response (see UIRESUME)
+uiwait(handles.figure1);
+
+
+% --- Outputs from this function are returned to the command line.
+function varargout = pt_GUIDE_value_OutputFcn(hObject, eventdata, handles) 
+% varargout  cell array for returning output args (see VARARGOUT);
+% hObject    handle to figure
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+
+varargout{1} = handles;
+
+
+delete(handles.figure1);
+
+
+
+function edit_filename_Callback(hObject, eventdata, handles)
+
+handles.filename = get(hObject,'String');
+guidata(hObject,handles);
+
+
+% --- Executes on button press in pushbutton_ref.
+function pushbutton_ref_Callback(hObject, eventdata, handles)
+
+[filename, pathname] = uigetfile('*.tif','File Selector');
+%fullfile(pathname, filename)
+cd(pathname)
+handles.filename = filename;
+handles.pathname = pathname;
+set(handles.edit_filename,'String',filename)
+guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_filename_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit_thfactor_Callback(hObject, eventdata, handles)
+
+handles.thfactor = str2double(get(hObject,'String'));
+guidata(hObject,handles);
+
+% --- Executes during object creation, after setting all properties.
+function edit_thfactor_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+% --- Executes during object creation, after setting all properties.
+function edit_maxdisp_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit_p_mem_Callback(hObject, eventdata, handles)
+
+handles.p_mem = str2double(get(hObject,'String'));
+guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_p_mem_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+function edit_p_dim_Callback(hObject, eventdata, handles)
+
+handles.p_dim = str2double(get(hObject,'String'));
+guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_p_dim_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+function edit_p_good_Callback(hObject, eventdata, handles)
+
+handles.p_good = str2double(get(hObject,'String'));
+guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_p_good_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+function edit_p_quiet_Callback(hObject, eventdata, handles)
+
+handles.p_quiet = str2double(get(hObject,'String'));
+guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_p_quiet_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+function edit_lnoise_Callback(hObject, eventdata, handles)
+
+handles.lnoise = str2double(get(hObject,'String'));
+guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_lnoise_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+function edit_lobject_Callback(hObject, eventdata, handles)
+
+handles.lobject = str2double(get(hObject,'String'));
+guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_lobject_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+function edit_threshold_Callback(hObject, eventdata, handles)
+
+handles.threshold = str2double(get(hObject,'String'));
+guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_threshold_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in checkbox_trimming.
+function checkbox_trimming_Callback(hObject, eventdata, handles)
+
+handles.trimming = get(hObject,'Value');
+guidata(hObject,handles);
+
+
+% --- Executes on button press in pushbutton_ok.
+function pushbutton_ok_Callback(hObject, eventdata, handles)
+
+if handles.te > handles.frame_lenupper
+    warning('Parameter error!');
+    warning('"time length upper" must be less than or equal to "frame length upper"')
+elseif mod(handles.lobject,2) == 0
+    warning('Parameter error!');
+    warning('lobject size must be an odd value');
+else
+    handles.output = 0; 
+    guidata(hObject, handles);
+
+    % Use UIRESUME instead of delete because the OutputFcn needs
+    % to get the updated handles structure.
+    uiresume(handles.figure1);
+end
+
+
+function edit_maxdisp_Callback(hObject, eventdata, handles)
+
+handles.maxdisp = str2double(get(hObject,'String'));
+guidata(hObject,handles);
+
+
+
+function edit_frame_lenlower_Callback(hObject, eventdata, handles)
+
+handles.frame_lenlower = str2double(get(hObject,'String'));
+guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_frame_lenlower_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit_ts_Callback(hObject, eventdata, handles)
+
+handles.ts = str2double(get(hObject,'String'));
+guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_ts_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+function edit_te_Callback(hObject, eventdata, handles)
+
+handles.te = str2double(get(hObject,'String'));
+guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_te_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+function edit_frame_lenupper_Callback(hObject, eventdata, handles)
+
+handles.frame_lenupper = str2double(get(hObject,'String'));
+guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_frame_lenupper_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+function edit_unit_time_Callback(hObject, eventdata, handles)
+
+handles.unit_time = str2double(get(hObject,'String'));
+guidata(hObject,handles);
+
+
+% --- Executes during object creation, after setting all properties.
+function edit_unit_time_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+function edit_unit_length_Callback(hObject, eventdata, handles)
+
+handles.unit_length = str2double(get(hObject,'String'));
+guidata(hObject,handles);
+
+% --- Executes during object creation, after setting all properties.
+function edit_unit_length_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+
+% --- Executes on selection change in popupmenu_display.
+function popupmenu_display_Callback(hObject, eventdata, handles)
+% Determine the selected data set.
+str = get(hObject, 'String');
+val = get(hObject,'Value');
+% Set current data to the selected data set.
+switch str{val}
+case 'Display ON (all)' 
+   handles.display = 1;
+case 'Display ON (only gragh)' 
+   handles.display = 2;
+case 'Display OFF' 
+   handles.display = 3;
+end
+% Save the handles structure.
+guidata(hObject,handles)
+
+
+
+% --- Executes during object creation, after setting all properties.
+function popupmenu_display_CreateFcn(hObject, eventdata, handles)
+
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+
+% --- Executes on button press in pushbutton_display.
+function pushbutton_display_Callback(hObject, eventdata, handles)
+
+handles.display_detail = pt_GUIDE_select_fig(handles.display_detail);
+guidata(hObject,handles);
+
+
+% --- Executes on button press in pushbutton_reset.
+function pushbutton_reset_Callback(hObject, eventdata, handles)
+
+% value (box)
+set(handles.edit_filename,'String','Wt Abp1-mCH(250ms).tif')
+set(handles.checkbox_trimming,'Value',0)
+set(handles.edit_lnoise,'String',0)
+set(handles.edit_lobject,'String',9);
+set(handles.edit_threshold,'String',30);
+set(handles.edit_thfactor,'String',0.0);
+set(handles.edit_maxdisp,'String',5);
+set(handles.edit_p_mem,'String',0);
+set(handles.edit_p_dim,'String',2);
+set(handles.edit_p_good,'String',0);
+set(handles.edit_p_quiet,'String',1);
+set(handles.edit_frame_lenlower,'String',10);
+set(handles.edit_frame_lenupper,'String',60);
+set(handles.edit_ts,'String',0);
+set(handles.edit_te,'String',35);
+set(handles.popupmenu_display,'Value',1);
+set(handles.edit_unit_time,'String',1);
+set(handles.edit_unit_length,'String',64.5);
+
+% % value (return value)
+handles.filename = 'Wt Abp1-mCH(250ms).tif';
+handles.pathname = '/';
+handles.trimming = str2double('0');
+handles.lnoise = str2double('0');
+handles.lobject = str2double('9');
+handles.threshold = str2double('30');
+handles.thfactor = str2double('0.0');
+handles.maxdisp = str2double('5');
+handles.p_mem = str2double('0');
+handles.p_dim = str2double('2');
+handles.p_good = str2double('0');
+handles.p_quiet = str2double('1');
+handles.frame_lenlower = str2double('10');
+handles.frame_lenupper = str2double('60');
+handles.ts = str2double('0');
+handles.te = str2double('35');
+handles.display = str2double('1');
+handles.display_detail = str2double('101111111');
+handles.unit_time = str2double('1');
+handles.unit_length = str2double('64.5');
+
+guidata(hObject,handles);
+
+
+% --- Executes on button press in checkbox_save.
+function checkbox_save_Callback(hObject, eventdata, handles)
+
+%handles.checkbox_save = get(hObject,'Value');
+handles.save = get(hObject,'Value');
+guidata(hObject,handles);

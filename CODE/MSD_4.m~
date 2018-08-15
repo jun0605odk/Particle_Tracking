@@ -1,0 +1,137 @@
+function dd = MSD_4(trackdata,unit,im,no_disp_all)
+
+% USAGE:    msd = MSD_3(trackdata)
+% PURPOSE:  
+%           Calcuate the MSD from the output of track.m
+%           
+% 
+% INPUT:
+% trackdata 
+%           Trajectory data of the 6-column format:
+%          'x-position' 'y-position' 'brightnesses' 
+%          'sqare of the radius of gyration' 'frame' 'particle ID'
+%
+% im 
+%           Image data
+%
+% no_disp_all
+%           Flag indicating whether to display
+%
+%
+% OUTPUT:  
+% dd: length of displacement each frame
+
+
+
+
+dd = zeros(size(trackdata,1),4);
+dd(:,4) = trackdata(:,6);
+
+
+%initial value
+c_over10 = 0;
+plot_data = {};
+MFI = [];
+ID_data = [];
+MFI_data = [];
+dst_ratio_data = [];
+X1 = {}; X2_1 = {}; X2_2 = {};
+Y1 = {}; Y2_1 = {}; Y2_2 = {}; Y3_1 = {}; Y3_2 = {}; Y4_1 = {}; Y4_2 = {};
+
+
+
+
+% Step through all particles in the tracked data set
+for (particleid=1:max(trackdata(:,6)))
+    
+    % Find the starting row of the particleid in trackdata
+    % This is the offset
+    index = find(trackdata(:,6)==particleid,1);
+    
+    % Find the number of frames for the particle
+    % NOTE that this is NOT equivalent to time steps of 1 if the data has
+    % "skipped frames"
+    totalframe = sum(trackdata(:,6)==particleid);
+       
+    % Caluculate moved distance
+    if totalframe >= 2
+        
+        r_len = 0;%!
+        for j=1:totalframe-1
+            r2 = (trackdata(index+j,1)*unit(2)-trackdata(index+j-1,1)*unit(2))^2 ...
+                 + (trackdata(index+j,2)*unit(2)-trackdata(index+j-1,2)*unit(2))^2;
+            r_len = r_len + sqrt(r2);%!
+            dd(index+j,1) = sqrt(r2); 
+            dd(index+j,3) = r_len;%!
+            
+            r2 = (trackdata(index+j,1)*unit(2)-trackdata(index,1)*unit(2))^2 ...
+                 + (trackdata(index+j,2)*unit(2)-trackdata(index,2)*unit(2))^2;
+            dd(index+j,2) = sqrt(r2);
+        end
+        
+    end
+    
+    % Caluculate MFI
+    MFI(particleid) = sum(trackdata(index:index+totalframe-1,3)) /...
+                      totalframe;%! MFI(mean fluorescence intensity)
+
+    
+    
+    % graphical representation
+    if ( totalframe > 10 && dd(index+totalframe-1,2)>0)
+        
+        c_over10 = c_over10 + 1;
+        
+        ID_data(c_over10)   = particleid;
+        MFI_data(c_over10)  = MFI(particleid);
+        dst_ratio_data(c_over10) = dd(index+totalframe-1,2) /...
+                                   dd(index+totalframe-1,3);%! The ratio of root and distance
+        
+        
+        
+        X1{c_over10}(:)   = trackdata(index,1);
+        Y1{c_over10}(:)   = trackdata(index,2);
+        X2_1{c_over10}(:) = trackdata(index+totalframe-1,1)*unit(2) -...
+                            trackdata(index,1)*unit(2);
+        Y2_1{c_over10}(:) = trackdata(index+totalframe-1,2)*unit(2) -...
+                            trackdata(index,2)*unit(2);
+        X2_2{c_over10}(:) = trackdata(index:index+totalframe-1,1)*unit(2) -trackdata(index,1)*unit(2);
+        Y2_2{c_over10}(:) = trackdata(index:index+totalframe-1,2)*unit(2)-trackdata(index,2)*unit(2);
+        Y3_1{c_over10}(:) = dd(index:index+totalframe-1,1);
+        Y3_2{c_over10}(:) = dd(index:index+totalframe-1,2);
+        Y4_1{c_over10}(:) = trackdata(index:index+totalframe-1,3) /...
+                            max(trackdata(index:index+totalframe-1,3));
+        Y4_2{c_over10}(:) = dd(index:index+totalframe-1,3);
+ 
+        
+        
+    end
+end
+
+plot_data{1,1,1} = X1;
+plot_data{2,1,1} = Y1;
+plot_data{1,2,1} = X2_1;
+plot_data{2,2,1} = Y2_1;
+plot_data{1,2,2} = X2_2;
+plot_data{2,2,2} = Y2_2;
+plot_data{2,3,1} = Y3_1;
+plot_data{2,3,2} = Y3_2;
+plot_data{2,4,1} = Y4_1;
+plot_data{2,4,2} = Y4_2;
+
+plot_data{3,1,1} = im;
+plot_data{3,2,1} = ID_data;
+plot_data{3,2,2} = MFI_data;
+plot_data{3,2,3} = dst_ratio_data;
+
+
+MFI_all = sum(MFI) / max(trackdata(:,6));
+disp(['MFI(all)   ',num2str(MFI_all)])
+dlmwrite('dd.csv',dd);
+
+disp(' ')
+
+%if no_disp_all ~= 1;
+    pt_GUIDE_figure(plot_data);
+%end
+

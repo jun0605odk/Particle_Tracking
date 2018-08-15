@@ -1,0 +1,130 @@
+function dd = MSD_3(trackdata,im)
+
+% USAGE:    msd = MSD_3(trackdata)
+% PURPOSE:  
+%           Calcuate the MSD from the output of track.m
+%           
+% 
+% INPUT:
+% trackdata 
+%           Trajectory data of the 6-column format:
+%          'x-position' 'y-position' 'brightnesses' 
+%          'sqare of the radius of gyration' 'frame' 'particle ID'
+%             
+% OUTPUT:  
+% dd: length of displacement each frame
+
+dd = zeros(size(trackdata,1),4);%!
+dd(:,4) = trackdata(:,6);%!
+
+% Step through all particles in the tracked data set
+count=0;
+MFI_sum=0;
+for (particleid=1:max(trackdata(:,6)))
+    
+    % Find the starting row of the particleid in trackdata
+    % This is the offset
+    index = find(trackdata(:,6)==particleid,1);
+    
+    % Find the number of frames for the particle
+    % NOTE that this is NOT equivalent to time steps of 1 if the data has
+    % "skipped frames"
+    totalframe = sum(trackdata(:,6)==particleid);
+       
+    % Caluculate moved distance
+    if totalframe >= 2
+        
+        r_len = 0;%!
+        for j=1:totalframe-1
+            r2 = (trackdata(index+j,1)-trackdata(index+j-1,1))^2 ...
+                     + (trackdata(index+j,2)-trackdata(index+j-1,2))^2;
+            r_len = r_len + sqrt(r2);%!
+            dd(index+j,1) = sqrt(r2); 
+            dd(index+j,3) = r_len;%!
+            
+            r2 = (trackdata(index+j,1)-trackdata(index,1))^2 ...
+                     + (trackdata(index+j,2)-trackdata(index,2))^2;
+            dd(index+j,2) = sqrt(r2);
+        end
+        
+    end
+    
+    
+    % graphical representation
+    if ( totalframe > 10 && dd(index+totalframe-1,2)>0)
+        
+         % Caluculate 
+        MFI = sum(trackdata(index:index+totalframe-1,3)) / totalframe;%! MFI(mean fluorescence intensity)
+        dst_ratio = dd(index+totalframe-1,2) / dd(index+totalframe-1,3);%! The ratio of root and distance
+        
+        %!       
+        str1 = sprintf('   %s %-5d','ID:',trackdata(index,6));%! track ID
+        str2 = sprintf('   %s %7.2f','MFI:',MFI);%! MFI(mean fluorescence intensity)
+        str3 = sprintf('    %s %4.2f','dst ratio:',dst_ratio);%! MFI(mean fluorescence intensity)
+        disp([str1, str2, str3])
+        
+        %!
+        figure(10);
+        subplot(2,2,1);%!
+        colormap(gray);
+        imagesc(im);%!
+    %   imagesc(I(1:400,1:400,frame));
+        axis image;
+        hold on;
+        title ('Particle Tracking','FontSize',14);
+        plot(trackdata(index,1),trackdata(index,2),'ro','MarkerSize',5,'LineWidth',1);
+        hold off    
+    
+        figure(10)%!11
+        subplot(2,2,2);%!
+        plot(0,0,'bo')%! initial coordinate
+        axis equal
+        axis([-15 15 -15 15])
+        hold on
+        plot(trackdata(index+totalframe-1,1)-trackdata(index,1), ...
+             trackdata(index+totalframe-1,2)-trackdata(index,2),'ro') % final coordinate
+        plot(trackdata(index:index+totalframe-1,1)-trackdata(index,1),...
+             trackdata(index:index+totalframe-1,2)-trackdata(index,2),'-k.','MarkerSize',10)% traking line
+        text(-5,-13,str3)%!
+        title ({'Movement of prticle';'(NOTE: the data has "skipped frames")'},'FontSize',13)%!
+        legend({'Initial Point','Final  Point'},'FontSize',8)%!
+        hold off
+    
+        figure(10)
+        subplot(2,2,3);%!
+        plot(dd(index:index+totalframe-1,1:2))
+        axis([0 60 0 20])
+        title ({'Distance';'(NOTE: the data has "skipped frames")'},'FontSize',13)%!
+        legend({'distance(bef\_frm to cur\_frm)','distance(1st\_frm to cur\_frm)'},'FontSize',8)%!
+        xlabel('Frame')%!
+        ylabel('distance [pixel]')%!
+        
+        figure(10)%!12
+        subplot(2,2,4);%!
+        yyaxis left
+        plot(trackdata(index:index+totalframe-1,3))%brightness
+        axis([0 60 0 2500])
+        ylabel('Fluorescence Intensity')%!
+        yyaxis right
+        plot(dd(index:index+totalframe-1,3))%distance
+        axis([0 60 0 50])
+        text(40,5,str2)%! 
+        title ({'fluorescence intensity';'(NOTE: the data has "skipped frames")'},'FontSize',13)%!
+        xlabel('Frame')%!
+        ylabel('Distance')%!
+       
+%        figure(13);
+%        plot(trackdata(index:index+totalframe-1,4)); 
+%        axis([0 60 0 10]);
+       
+        pause(0.5);
+    count=count+1;
+    MFI_sum = MFI_sum + MFI;
+    end
+    
+end
+
+MFI_all = MFI_sum / count
+dlmwrite('dd.csv',dd);
+
+
